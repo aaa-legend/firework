@@ -109,22 +109,22 @@ if __name__ == '__main__':
     pygame.display.set_caption('Fireworks Show')
 
     # 加载背景图片
-    bg_image = pygame.image.load('C:/Users/liush/Pictures/Saved Pictures/starry-sky-g3c9281f74_1920.jpg')
+    bg_image = pygame.image.load('backgroundimg.jpg')
 
     # pygame.display.set_caption("Alien Invasion")
     fcclock = pygame.time.Clock()
     fps = 30
     fireworks = []
     running = True
-    filename = "C:/Users/liush/Downloads/Music/Fallyou.wav"
-    fileworkpath = "C:/Users/liush/Downloads/Music/firework1.mp3"
+    filename = "music.wav"
+    fileworkpath = "boom.mp3"
     fs,signal = wav.read(filename)
     signal[:,0] = abs(signal[:,0])
     t_legth = signal.shape[0] / fs
     a = []
     for i in range(int(t_legth)):
-        a.append(np.mean(signal[i*fs:(i+1)*fs, 0]))
-
+        a.append(np.mean(signal[i*fs:(i+1)*fs, 0])) #根据fps对音频的振幅进行均值采样
+    
     pygame.mixer.init()
     pygame.mixer.Channel(0).play(pygame.mixer.Sound(filename))
 
@@ -149,7 +149,8 @@ if __name__ == '__main__':
                 fireworks.append(firework)
         if t%fps == 0 and t/fps <= len(a)-2:
             print(t/fps)
-            for i in range(int(a[int(t/fps)+1]/3000)):
+            delay = 1
+            for i in range(int(a[int(t/fps)+delay]/1000)):  #根据音乐的振幅大小判断烟花数量,delay为烟花提前出现的时间，除以1000来控制烟花的数量
 
                 rand_x = random.randint(0, width)
                 rand_y = random.randint(height-100, height)
